@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 streamlit = "*"
 replicate = "*"
+openai = "*"
+langchain = "*"
 
 [dev-packages]
 
