@@ -2,7 +2,6 @@ import streamlit as st
 import replicate
 import os
 import pandas as pd
-from langchain.llms import OpenAI
 import openai
 from dotenv import load_dotenv
 from langchain.agents import load_tools, initialize_agent, create_pandas_dataframe_agent, AgentType
@@ -10,6 +9,8 @@ from langchain.callbacks import StreamlitCallbackHandler
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.chat_models import ChatOpenAI
 load_dotenv()
+os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
+from langchain.llms import OpenAI
 # App title
 st.set_page_config(page_title="🦙💬 ChatVirgin")
 
