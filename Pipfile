@@ -8,6 +8,7 @@ streamlit = "*"
 replicate = "*"
 openai = "*"
 langchain = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

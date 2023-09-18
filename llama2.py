@@ -18,20 +18,26 @@ st.set_page_config(page_title="🦙💬 ChatVirgin")
 # Replicate Credentials   
 with st.sidebar:
     st.title('Eminem^50C')
-    if 'REPLICATE_API_TOKEN': ''' in st.secrets:
-        st.success('API key already provided!', icon='✅')
-        replicate_api = ['REPLICATE_API_TOKEN']''' #st.secret
+     #'REPLICATE_API_TOKEN': ''' in st.secrets:
+        #st.success('API key already provided!', icon='✅')
+        #replicate_api = ['REPLICATE_API_TOKEN']''' #st.secret
+    
+    replicate_api = st.text_input('Enter Replicate API token:', type='password')
+    if not (replicate_api.startswith('r8_') and len(replicate_api)==40):
+        st.warning('Please enter your credentials!', icon='⚠️')
     else:
-        replicate_api = st.text_input('Enter Replicate API token:', type='password')
-        if not (replicate_api.startswith('r8_') and len(replicate_api)==40):
-            st.warning('Please enter your credentials!', icon='⚠️')
-        else:
-            st.success('Proceed to entering your prompt message!', icon='👉')
-            os.environ['REPLICATE_API_TOKEN'] = replicate_api
+        st.success('Proceed to entering your prompt message!', icon='👉')
+        os.environ['REPLICATE_API_TOKEN'] = replicate_api
+
+    st.subheader('Models and parameters')
+    selected_model = st.sidebar.selectbox('Choose a Llama2 model', ['phi-1.5', 'Llama2-7B'], key='selected_model')
+    if selected_model == 'phi-1.5':
+        llm = 'lucataco/phi-1.5:1503b791710440d857384e4d7057d9ebf645313ae8cce5c3f2b02585d910b3d0'
+    elif selected_model == 'Llama2-7B':
+        llm = '"meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e"'
     temperature = st.sidebar.slider('temperature', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
     top_p = st.sidebar.slider('top_p', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
     max_length = st.sidebar.slider('max_length', min_value=32, max_value=128, value=120, step=8)
-
 
 st.subheader('Models')
 tab1, tab2, tab3 = st.tabs(["phi-1.5", "llama2-7b", "ChatGpt"])
