@@ -58,7 +58,7 @@ with tab3:
             st.write("Answer:")
             st.write(answer)
         
-    llm = ChatOpenAI(model_name='gpt-3.5-turbo', openai_api_key = openai_api_key, streaming = True)
+    llm = ChatOpenAI(model_name='gpt-3.5-turbo', openai_api_key = "OPENAI_API_KEY", streaming = True)
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type = 'password')
     if 'messages' not in st.session_state:
         st.session_state['messages'] =[{'role': 'assistant', 'content':'Lets do this'}]
@@ -80,7 +80,7 @@ with tab3:
             handle_parsing_errors = True,
         )
         with st.chat_message('assistan'):
-            st_cb = SreamlitCallbackHandler(st.container(), expand_new_thoughts = False)
+            st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts = False)
             response = search_agent.run(st.container(), expand_new_thoughts = False)
             st.session_state.messages.append({'role':'assistant', 'content':response})
             st.write(response)
