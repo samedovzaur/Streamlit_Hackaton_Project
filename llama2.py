@@ -1,3 +1,4 @@
+import numpy as np
 import streamlit as st
 import replicate
 import os
@@ -9,7 +10,7 @@ from langchain.callbacks import StreamlitCallbackHandler
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.chat_models import ChatOpenAI
 load_dotenv()
-os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
+#os.environ["OPENAI_API_KEY"] = st.secrets['OPENAI_API_KEY']
 from langchain.llms import OpenAI
 # App title
 st.set_page_config(page_title="🦙💬 ChatVirgin")
@@ -17,9 +18,9 @@ st.set_page_config(page_title="🦙💬 ChatVirgin")
 # Replicate Credentials   
 with st.sidebar:
     st.title('Eminem^50C')
-    if 'REPLICATE_API_TOKEN' in st.secrets:
+    if 'REPLICATE_API_TOKEN': ''' in st.secrets:
         st.success('API key already provided!', icon='✅')
-        replicate_api = st.secrets['REPLICATE_API_TOKEN']
+        replicate_api = ['REPLICATE_API_TOKEN']''' #st.secret
     else:
         replicate_api = st.text_input('Enter Replicate API token:', type='password')
         if not (replicate_api.startswith('r8_') and len(replicate_api)==40):
@@ -27,7 +28,9 @@ with st.sidebar:
         else:
             st.success('Proceed to entering your prompt message!', icon='👉')
             os.environ['REPLICATE_API_TOKEN'] = replicate_api
-
+    temperature = st.sidebar.slider('temperature', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
+    top_p = st.sidebar.slider('top_p', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
+    max_length = st.sidebar.slider('max_length', min_value=32, max_value=128, value=120, step=8)
 
 
 st.subheader('Models')
@@ -39,6 +42,7 @@ with tab2:
     llm = 'meta/llama-2-7b-chat:8e6975e5ed6174911a6ff3d60540dfd4844201974602551e10e9e87ab143d81e'
 
 with tab3:
+    os.environ['OPENAI_API_KEY'] = "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"
     st.write("Upload a CSV file and enter a query to get an answer.")
     file =  st.file_uploader("Upload CSV file",type=["csv"])
     if not file:
@@ -46,9 +50,12 @@ with tab3:
         data = pd.read_csv(file)
     with st.container():
         st.write("Data Preview:")
-        st.dataframe(data.head()) 
-
-        agent = create_pandas_dataframe_agent(OpenAI(temperature=0.1),data,verbose=True) 
+        #st.dataframe(data.head()) 
+        df = pd.DataFrame(
+            np.random.randn(50, 20),
+            columns=('col %d' % i for i in range(20)))
+        st.dataframe(df)
+        agent = create_pandas_dataframe_agent(OpenAI(temperature=0.1),df,verbose=True) 
 
         query = st.text_input("Enter a query:") 
 
